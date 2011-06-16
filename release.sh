@@ -1,3 +1,4 @@
+#! /bin/sh -e
 ####
 # Build a new release
 #
@@ -10,20 +11,27 @@ if [ ! -f build.conf ]; then
   exit 1
 fi
 
-. build.conf
+# dash seems to need "./" here
+. ./build.conf
+BUILD_DIRECTORY="${BUILD_DIRECTORY:-bin}"
 
-if [ -z $1 ]; then
+if [ -z "$1" ] ; then
   echo "Release version is missing."
   echo "Usage: ./build_release.sh <version>"
+  exit 1
+fi
+
+if [ -z "$ANDROID_SDK" ] ; then
+  echo "Can not build without knowing where to find the Android SDK!"
   exit 1
 fi
 
 echo "Building yaaic $1"
 echo ""
 cd application
-ant release
+ant ${2:-release}
 cd ..
-jarsigner -verbose -keystore $KEYSTORE "$BUILD_DIRECTORY/Yaaic-unsigned.apk" release
+jarsigner -verbose -keystore "${KEYSTORE:-~/.keystore}" "$BUILD_DIRECTORY/Yaaic-unsigned.apk" "${RELEASE_KEY:-release}"
 jarsigner -verify "$BUILD_DIRECTORY/Yaaic-unsigned.apk"
 "$ANDROID_SDK/tools/zipalign" -v 4 "$BUILD_DIRECTORY/Yaaic-unsigned.apk" "$BUILD_DIRECTORY/yaaic-$1.apk"
 echo ""
