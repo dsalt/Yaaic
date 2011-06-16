@@ -18,6 +18,9 @@
     <string name="key_reconnect">reconnect</string>
     <string name="default_reconnect">false</string>
     
+    <string name="key_ignore_motd">ignore_motd</string>
+    <string name="default_ignore_motd">true</string>
+
     <string name="key_quitmessage">quitmessage</string>
     <string name="default_quitmessage">Yaaic - Yet another Android IRC client - http://www.yaaic.org</string>
     

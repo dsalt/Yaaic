@@ -28,6 +28,11 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:summary="@string/settings_reconnect_desc"
             android:key="@string/key_reconnect"
             android:defaultValue="@string/default_reconnect" />
+        <CheckBoxPreference
+            android:title="@string/settings_ignore_motd_title"
+            android:summary="@string/settings_ignore_motd_desc"
+            android:key="@string/key_ignore_motd"
+            android:defaultValue="@string/default_ignore_motd" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/settings_chat">

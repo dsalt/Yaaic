@@ -53,6 +53,8 @@ public class IRCConnection extends PircBot
     private ArrayList<String> autojoinChannels;
     private Pattern mNickMatch;
 
+    private boolean ignoreMOTD = true;
+
     private boolean isQuitting = false;
     private boolean disposeRequested = false;
     private final Object isQuittingLock = new Object();
@@ -140,6 +142,7 @@ public class IRCConnection extends PircBot
     public void onConnect()
     {
         server.setStatus(Status.CONNECTED);
+        ignoreMOTD = service.getSettings().isIgnoreMOTDEnabled();
 
         service.sendBroadcast(
             Broadcast.createServerIntent(Broadcast.SERVER_UPDATE, server.getId())
@@ -1088,8 +1091,11 @@ public class IRCConnection extends PircBot
             onRegister();
             return;
         }
-        if (code == 372 || code == 375 || code == 376) {
-            // Skip MOTD
+        if ((code == 372 || code == 375) && ignoreMOTD) {
+            return;
+        }
+        if (code == 376 && ignoreMOTD) {
+            ignoreMOTD = false;
             return;
         }
 
